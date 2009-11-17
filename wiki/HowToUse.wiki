@@ -1,27 +1,6 @@
 #labels Featured,Phase-Deploy
 <html>
 <p>This Flash application requires a moderate amount of web developer knowledge to be used successfully, although a beginner may be able to use and adapt the code given on this page by following the instructions carefully. Please note that I, Matt Bury, do not have the time to provide support to users who encounter problems with embedding the player. The embed code provided here is well known and the majority of web designers and web developers should have no problem in providing help. Also, please see the section below titled, &quot;Possible problems&quot; before seeking help.</p>
-    	<p>The application is embedded using the following code:</p>
-    	<table width="90%" border="1" align="center" cellpadding="10">
-    	  <tr>
-    	    <td class="htmlcode">&lt;div align=&quot;center&quot;&gt;<br />
-    	        &lt;object classid=&quot;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000&quot; width=&quot;600&quot; height=&quot;100&quot; id=&quot;myFlashContent&quot;&gt;<br />
-&lt;param name=&quot;movie&quot; value=&quot;swf/mp3_test.swf&quot; /&gt;<br />
-&lt;param name=&quot;flashvars&quot; value=&quot;mp3url=mp3/little_prince_01.mp3&amp;amp;timesToPlay=2&amp;amp;showPlay=true&amp;amp;waitToPlay=true&quot; /&gt;<br />
-&lt;!--[if !IE]&gt;--&gt;<br />
-&lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;swf/mp3_test.swf&quot; width=&quot;600&quot; height=&quot;100&quot;&gt;<br />
-&lt;param name=&quot;flashvars&quot; value=&quot;mp3url=mp3/little_prince_01.mp3&amp;amp;timesToPlay=2&amp;amp;showPlay=true&amp;amp;waitToPlay=true&quot; /&gt;<br />
-&lt;!--&lt;![endif]--&gt;<br />
-&lt;a href=&quot;http://www.adobe.com/go/getflashplayer&quot;&gt;<br />
-&lt;img src=&quot;http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif&quot; alt=&quot;Get Adobe Flash player&quot; /&gt;<br />
-&lt;/a&gt;<br />
-&lt;!--[if !IE]&gt;--&gt;<br />
-&lt;/object&gt;<br />
-&lt;!--&lt;![endif]--&gt;<br />
-&lt;/object&gt;<br />
-&lt;/div&gt;</td>
-  	    </tr>
-  	  </table>
     	<p>You can copy and paste this code into any HTML web page using a web or text editor. There are five lines of this code that you'll need to modify to make it work on your web site with the desired MP3 audio files. I've highlighted the parts that you need to edit in <strong>bold</strong>:</p>
     	<p><span class="htmlcode">3. &lt;object classid=&quot;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000&quot; width=&quot;<strong>600</strong>&quot; height=&quot;<strong>100</strong>&quot; id=&quot;myFlashContent&quot;&gt;<br />
 4. &lt;param name=&quot;movie&quot; value=&quot;<strong>swf/mp3_test.swf</strong>&quot; /&gt;<br />
