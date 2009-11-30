@@ -54,6 +54,7 @@ package {
 		private var _showPlay:Boolean = false; // show play button and wait to play
 		private var _loaded:Boolean = false; // MP3 file has finished loading
 		private var _playing:Boolean = false; // MP3 file is playing
+		private var _gotId3:Boolean = false; // MP3 file's ID3 tags can be accessed
 		private var _cmenu:CMenu; // Context menu - please do not change or remove
 		
 		public function MP3Test() {
@@ -205,8 +206,8 @@ package {
 		// Create playback graphic display
 		private function initProgressBar():void {
 			_sb = new Scrubber(); // graphic play back display is in FLA library
-			_sb.width = stage.stageWidth - _sx; // Stretch bar across width of stage
-			_sb.x = _sx + 5; // leave a little space between play button (if it exists) and progress bar
+			_sb.width = stage.stageWidth - _sx - 4; // Stretch bar across width of stage
+			_sb.x = _sx + 10; // leave a little space between play button (if it exists) and progress bar
 			_sb.y = _sb.height * 0.5;
 			_sb.bar.scaleX = 0; // Set playback progress bar to 0
 			_sb.filters = [_dsf]; // Add shadow
@@ -269,6 +270,9 @@ package {
 				this.addEventListener(Event.ENTER_FRAME, playbackProgressBar); // Start time remaining graphic display
 				this.addEventListener(Event.ENTER_FRAME, playbackRemainText); // Start time remaining countdown text display
 			}
+			if(!_gotId3) {
+				_id3.text = "";
+			}
 		}
 		
 		// This is triggered when the MP3 file can't be downloaded for some reason, i.e. can't be found
@@ -290,6 +294,7 @@ package {
 			var trackNo:String = _s.id3.track;
 			var title:String = _s.id3.songName;
 			_id3.text = trackNo + ": " + title + ", " + album + ", " + artist; // Display MP3 ID3 info
+			_gotId3 = true;
 		}
 		
 		//
