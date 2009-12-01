@@ -105,6 +105,9 @@ and
 
 7. Wait to play: This parameter is optional and the default is false. Setting it to true tells the player to wait until the loaded MP3 file has finished downloading before allowing playback to start. This is useful if you anticipate slow or intermittent internet connections that could interrupt the download while the student is listening.
 
+8. Show MP3 ID3 tags: This parameter is optional and the default is false. Setting it to true displays the current MP3 file's track number, title, album and artist. If the ID3 tags are not accessible in the MP3 file, the player displays "Waiting for ID3 tags..." and waits until the MP3 file has downloaded compeletly before clearing the ID3 tag display.
+
+
 ==Possible problems==
 
 Please note that some learning management systems use filtres that strip out certain types of code. If this embed code doesn't work, firstly, check that the code doesn't contain any errors and that the paths to the Flash and audio files are valid (copy and paste them into your browser's address bar), then check that your learning management system allows &lt;object&gt; and &lt;embed&gt; tags, which are necessary to embed Flash applications. You may need administrator priviledges to change these settings.
