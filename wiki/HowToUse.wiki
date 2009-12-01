@@ -73,6 +73,13 @@ In both sets of lines, 3, 4 &amp; 5 and 7 &amp; 8, there are seven parameters*:
         <td>(optional) default = false</td>
         <td>Wait for download to complete before playing</td>
       </tr>
+      <tr>
+        <td>8.</td>
+        <td>showID3</td>
+        <td><strong>true</strong></td>
+        <td>(optional) default = false</td>
+        <td>Display MP3 ID3 tags (track number, title, album, artist)</td>
+      </tr>
     </table>
 
 Please note that "&amp;" is a separator between the parameters.
