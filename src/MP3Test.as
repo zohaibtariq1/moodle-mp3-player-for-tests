@@ -28,12 +28,10 @@ package {
 		// User feedback messages. Edit these to change language.
 		// TODO: Include parameter to XML file to change these to
 		// provide multi-language support default should be English.
-		private var _noURL:String = "Please provide a URL to the MP3 file to play.";
-		private var _loading:String = "Loading audio... ";
-		private var _loadingComplete:String = "Complete. Press play to start.";
+		private var _noURL:String = "No MP3 URL.";
+		private var _loading:String = "Loading... ";
 		private var _waiting:String = "Waiting for MP3 tag info... ";
-		private var _finished:String = "The recording has finished.";
-		private var _sorry:String = "Sorry, there was a problem with the audio. Please try again or contact admin.";
+		private var _sorry:String = "MP3 file error";
 		// --------------------------------------------------------------------------------------------------------
 		private var _font:String = "Trebuchet MS"; // This determines all the display text fonts
 		private var _url:String = ""; // MP3 file to load and play
@@ -41,6 +39,7 @@ package {
 		private var _pb:PlayButton;
 		private var _sx:int = 0; // .x position of the scubber bar
 		private var _sb:Scrubber; // graphic play back display
+		private var _sbg:Bg; // blue background of play back display
 		private var _dsf:DropShadowFilter;
 		private var _t:TextField; // time elapsed text display
 		private var _tr:TextField; // time remaining text display
@@ -52,9 +51,11 @@ package {
 		private var _playCount:int = 0; // the number of times the MP3 has been played
 		private var _waitToPlay:Boolean = false; // wait for MP3 download to finish before playing
 		private var _showPlay:Boolean = false; // show play button and wait to play
+		private var _showID3:Boolean = false; // show play button and wait to play
 		private var _loaded:Boolean = false; // MP3 file has finished loading
 		private var _playing:Boolean = false; // MP3 file is playing
 		private var _gotId3:Boolean = false; // MP3 file's ID3 tags can be accessed
+		private var _pbAlpha:Number = 0.3;
 		private var _cmenu:CMenu; // Context menu - please do not change or remove
 		
 		public function MP3Test() {
@@ -78,6 +79,7 @@ package {
 				initPlayButton();
 			}
 			initProgressBar();
+			stage.addEventListener(Event.RESIZE, resizeHandler);
 		}
 		
 		// Create custom context menu (right-click on Flash Player) which shows author, GPL licence and copyright
@@ -104,20 +106,21 @@ package {
 				_timesToPlay = 1; // Set default to 1
 			}
 			// Set waitToPlay optional parameter. Anything but waitToPlay=true returns false.
-			if(this.root.loaderInfo.parameters.waitToPlay) {
-				if(this.root.loaderInfo.parameters.waitToPlay == "true") {
-					_waitToPlay = true;
-				}
+			if(this.root.loaderInfo.parameters.waitToPlay && this.root.loaderInfo.parameters.waitToPlay == "true") {
+				_waitToPlay = true;
 			}
 			// Set showPlay optional parameter. Anything but showPlay=true returns false.
-			if(this.root.loaderInfo.parameters.showPlay) {
-				if(this.root.loaderInfo.parameters.showPlay == "true") {
-					_showPlay = true;
-				}
+			if(this.root.loaderInfo.parameters.showPlay && this.root.loaderInfo.parameters.showPlay == "true") {
+				_showPlay = true;
+			}
+			// Set showID3 optional parameter. Anything but showID3=true returns false.
+			if(this.root.loaderInfo.parameters.showID3 && this.root.loaderInfo.parameters.showID3 == "true") {
+				_showID3 = true;
 			}
 			//_urlPresent = true; // For testing in Flash IDE
 			//_showPlay = false; // For testing in Flash IDE
 			//_waitToPlay = false; // For testing in Flash IDE
+			//_showID3 = false; // For testing in Flash IDE
 		}
 		
 		// ----------------------------------------- DISPLAY ----------------------------------------- /
@@ -130,27 +133,34 @@ package {
 			f.bold = true;
 			// time elapsed display
 			_t = new TextField();
+			_t.selectable = false;
 			_t.autoSize = TextFieldAutoSize.LEFT;
 			_t.defaultTextFormat = f;
-			_t.x = 2;
-			_t.y = 20;
+			_t.x = 0;
+			_t.y = 14;
 			_t.text = _loading;
 			addChild(_t);
 			// time remaining display
 			_tr = new TextField();
+			_tr.selectable = false;
 			_tr.autoSize = TextFieldAutoSize.RIGHT;
 			_tr.defaultTextFormat = f;
-			_tr.x = stage.stageWidth - 10;
-			_tr.y = 20;
+			_tr.x = stage.stageWidth - 5;
+			_tr.y = _t.y;
 			_tr.text = "";
 			addChild(_tr);
 			// ID3 tag info display
 			_id3 = new TextField();
+			_id3.selectable = false;
 			_id3.autoSize = TextFieldAutoSize.LEFT;
 			_id3.x = 2;
 			_id3.y = _t.y + _t.height;
 			_id3.defaultTextFormat = f;
-			_id3.text = _waiting;
+			if(_showID3) {
+				_id3.text = _waiting;
+			} else {
+				_id3.text = "";
+			}
 			addChild(_id3);
 		}
 		
@@ -161,7 +171,10 @@ package {
 			_pb.x = _pb.width * 0.5;
 			_pb.y = _pb.height * 0.5;
 			_pb.filters = [_dsf];
-			_sx = _pb.x + _pb.width;
+			_sx = _pb.width + 3; // 
+			if(_waitToPlay) {
+				_pb.alpha = _pbAlpha;
+			}
 			addChild(_pb);
 		}
 		
@@ -188,6 +201,7 @@ package {
 		private function enablePlayback():void {
 			_pb.buttonMode = true; // Turn on hand cursor
 			_pb.addEventListener(MouseEvent.MOUSE_DOWN, playDown); // Listen for button press
+			_pb.alpha = 1; // play button shows it's ready to play
 		}
 		
 		// Start MP3 playback
@@ -201,17 +215,34 @@ package {
 			_playing = true;
 			this.addEventListener(Event.ENTER_FRAME, playbackProgressText); // Display elapsed playback time
 			_sc.addEventListener(Event.SOUND_COMPLETE, soundComplete); // Listen for playback to finish
+			_pb.alpha = _pbAlpha; // play button shows it's de-activated
 		}
 		
 		// Create playback graphic display
 		private function initProgressBar():void {
 			_sb = new Scrubber(); // graphic play back display is in FLA library
-			_sb.width = stage.stageWidth - _sx - 4; // Stretch bar across width of stage
-			_sb.x = _sx + 10; // leave a little space between play button (if it exists) and progress bar
-			_sb.y = _sb.height * 0.5;
+			_sb.width = stage.stageWidth - _sx - 20; // Stretch bar across width of stage
+			_sb.x = _sx + 8; // leave a little space between play button (if it exists) and progress bar
+			_sb.y = 8;
 			_sb.bar.scaleX = 0; // Set playback progress bar to 0
-			_sb.filters = [_dsf]; // Add shadow
+			_sbg = new Bg(); // blue background behind progress bar
+			_sbg.width = _sb.width + 16; // guarantee an 8 pixel blue border at both ends of progress bar
+			_sbg.x = _sb.x - 8;
+			_sbg.y = _sb.y;
+			_sbg.filters = [_dsf]; // Add shadow
+			addChild(_sbg);
 			addChild(_sb);
+		}
+		
+		//
+		private function resizeHandler(event:Event):void {
+			_sb.width = stage.stageWidth - _sx - 20; // Stretch bar across width of stage
+			_sb.x = _sx + 8; // leave a little space between play button (if it exists) and progress bar
+			_sb.y = 8;
+			_sbg.width = _sb.width + 16;
+			_sbg.x = _sb.x - 8;
+			_sbg.y = _sb.y;
+			
 		}
 		
 		// Load the sound from URL provided as FlashVars in HTML embed code
@@ -256,7 +287,13 @@ package {
 			_s.removeEventListener(ProgressEvent.PROGRESS, preloaderText); // Clean up
 			_sl = event.target.length; // Get MP3 total length in milliseconds
 			_loaded = true;
-			_t.text = _loadingComplete; // Display download complete message
+			_t.text = "0:00";
+			// Display length of MP3 is human readable format
+			var secs:int = _sl / 1000;
+			var mins:int = secs / 60;
+			secs -= mins * 60;
+			var rem:String = mins + ":" + String(secs + 100).substr(1,2); // Convert it into a human readable string
+			_tr.text = rem;
 			// Start playback
 			if(!_showPlay && _waitToPlay) {
 				playSound();
@@ -293,7 +330,9 @@ package {
 			var artist:String = _s.id3.artist;
 			var trackNo:String = _s.id3.track;
 			var title:String = _s.id3.songName;
-			_id3.text = trackNo + ": " + title + ", " + album + ", " + artist; // Display MP3 ID3 info
+			if(_showID3) {
+				_id3.text = trackNo + ": " + title + ", " + album + ", " + artist; // Display MP3 ID3 info
+			}
 			_gotId3 = true;
 		}
 		
@@ -307,8 +346,6 @@ package {
 		private function repeatSound():void {
 			if(_playCount < _timesToPlay) {
 				_sc = _s.play();
-			} else {
-				_t.text = _finished; // Display message to user
 			}
 		}
 		
