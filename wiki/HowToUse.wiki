@@ -1,7 +1,9 @@
+#summary How to deploy the player in web pages
 #labels Featured,Phase-Deploy
+
 This Flash application requires a moderate amount of web developer knowledge to be used successfully, although a beginner may be able to use and adapt the code given on this page by following the instructions carefully. Please note that I, Matt Bury, do not have the time to provide support to users who encounter problems with embedding the player. The embed code provided here is well known and the majority of web designers and web developers should have no problem in providing help. Also, please see the section below titled, &quot;Possible problems&quot; before seeking help.
 
-You can copy and paste this code into any HTML web page using a web or text editor. There are five lines of this code that you'll need to modify to make it work on your web site with the desired MP3 audio files. I've highlighted the parts that you need to edit in *bold*:
+You can copy and paste this code into any HTML web page using a web or text editor. There are five lines of this code that you'll need to modify to make it work on your web site with the desired MP3 audio files:
 
 {{{
 <div align="center">
