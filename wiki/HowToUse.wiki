@@ -113,7 +113,7 @@ and
 
 ==Possible problems==
 
-Please note that some learning management systems use filtres that strip out certain types of code. If this embed code doesn't work, firstly, check that the code doesn't contain any errors and that the paths to the Flash and audio files are valid (copy and paste them into your browser's address bar), then check that your learning management system allows &lt;object&gt; and &lt;embed&gt; tags, which are necessary to embed Flash applications. You may need administrator priviledges to change these settings.
+Please note that some learning management systems use filtres that strip out certain types of code. If this embed code doesn't work, firstly, check that the code doesn't contain any errors and that the paths to the Flash and audio files are valid (copy and paste them into your browser's address bar), then check that your learning management system allows <object> and <embed> tags, which are necessary to embed Flash applications. You may need administrator priviledges to change these settings.
 
 ----
 
