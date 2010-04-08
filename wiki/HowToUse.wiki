@@ -109,6 +109,27 @@ and
 
 8. Show MP3 ID3 tags: This parameter is optional and the default is false. Setting it to true displays the current MP3 file's track number, title, album and artist. If the ID3 tags are not accessible in the MP3 file, the player displays "Waiting for ID3 tags..." and waits until the MP3 file has downloaded compeletly before clearing the ID3 tag display.
 
+9. Add HTTP: This parameter is optional. It is a workaround for CMSs that use link filters indiscriminately and add an `<a href=""></a>` tag wherever they find `http://` on a page. With `addHttp=true`, you can omit the `http://` from the `mp3url` parameter and the MP3 Player for Tests will add it once it has been passed in.
+
+Here is a full example with the addHttp=true parameter:
+{{{
+<div align="center">
+	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="800" height="100" id="myFlashContent">
+		<param name="movie" value="http://yourmoodle.com/moodle/file.php/7/swf/mp3_test.swf" />
+		<param name="flashvars" value="mp3url=yourmoodle.com/moodle/file.php/7/mp3/cae_2008_book_2_test_1_part_1.mp3&amp;timesToPlay=2&addHttp=true" />
+		<!--[if !IE]>-->
+		<object type="application/x-shockwave-flash" data="http://yourmoodle.com/moodle/file.php/7/swf/mp3_test.swf" width="800" height="100">
+			<param name="flashvars" value="mp3url=yourmoodle.com/moodle/file.php/7/mp3/cae_2008_book_2_test_1_part_1.mp3&amp;timesToPlay=2&addHttp=true" />
+		<!--<![endif]-->
+			<a href="http://www.adobe.com/go/getflashplayer">
+				<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" />
+			</a>
+		<!--[if !IE]>-->
+		</object>
+		<!--<![endif]-->
+	</object>
+</div>
+}}}
 ----
 
 ==Possible problems==
