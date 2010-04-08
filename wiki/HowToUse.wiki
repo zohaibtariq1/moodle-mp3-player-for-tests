@@ -82,6 +82,13 @@ In both sets of lines, 3, 4 & 5 and 7 & 8, there are seven parameters*:
         <td>(optional) default = false</td>
         <td>Display MP3 ID3 tags (track number, title, album, artist)</td>
       </tr>
+      <tr>
+        <td>9.</td>
+        <td>addHttp</td>
+        <td><strong>false</strong></td>
+        <td>(optional) default = false</td>
+        <td>Append "http://" to the mp3url parameter. (Workaround for link filters)</td>
+      </tr>
     </table>
 
 Please note that "&amp;" is a separator between the parameters.
